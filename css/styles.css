@@ -1,0 +1,11 @@
+img {
+    height: 300px;
+}
+
+.game-window {
+    display: flex;
+}
+
+.unit-window {
+    margin: 50px;
+}
