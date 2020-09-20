@@ -50,7 +50,7 @@ let player = {
 let goblin = {
     name: 'Goblin person',
     level: 1,
-    exp: 10, // Exp gained if killed by player
+    exp: 5, // Exp gained if killed by player
     hp: 50,
     atk: 5,
     def: 5,
@@ -98,8 +98,6 @@ let opponents = [
     big_boss
 ];
 
-let currentOpponent = { current: null };
-
 let opponentMoves = [
     {
         name: 'claw',
@@ -129,9 +127,7 @@ let opponentMoves = [
 
 let game = {
     player: player,
-    opponent: null,
-    nextPlayerMove: -1,
-    nextAntMove: 0
+    opponent: null
 };
 
 let activityLog = ''
@@ -161,6 +157,20 @@ function runGame(game) {
     let i = 0;
     // console.log('turn: ', i);
     let res = runTurn(game);
+    if (res !== 'continue') {
+        if (res === 'win') {
+            game.player.currentExp += game.opponent.exp;
+            while (game.player.currentExp >= game.player.maxExp) { // Level up!
+                game.player.level += 1;
+                game.player.hp += 50;
+                game.player.atk += 1;
+                game.player.def += 1;
+                game.player.currentExp -= game.player.maxExp;
+            }
+            game.opponent = null;
+        }
+        return;
+    }
     prepareNextTurn(game);
     i += 1;
 }
@@ -207,8 +217,7 @@ function init(game) {
 }
 
 function startBattleWith (opponent) {
-    currentOpponent.current = { ...opponent, nextMove: null, moves: opponentMoves };
-    game.opponent = currentOpponent.current;
+    game.opponent = { ...opponent, nextMove: null, moves: opponentMoves };
     init(game);
 }
 
@@ -275,7 +284,6 @@ var scene = new Vue({
     el: '#scene',
     data: {
         player: player,
-        opponent: currentOpponent,
         opponents: opponents,
         game: game
     }

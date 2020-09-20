@@ -7,20 +7,25 @@
 </head>
 <body>
     <h1>SOLO LEVELING</h1>
-    <div id='scene' class='game-window'>
-        <div>
-            <health-bar v-bind:player='player'></health-bar>
-            <player-moves
-                v-if="opponent.current !== null"
-                v-bind:player='player'
-            ></player-moves>
+    <div id='scene'>
+        <div v-if='player.hp == 0'>
+            Game over, you dead!
         </div>
-        <div v-if="opponent.current === null">
-            <p>Select opponent:</p>
-            <opponent-summary v-for='opponent in opponents' v-bind:opponent='opponent'></opponent-summary>
-        </div>
-        <div v-else>
-            <opponent v-bind:opponent='opponent.current'></opponent>
+        <div v-else class='game-window'>
+            <div>
+                <health-bar v-bind:player='player'></health-bar>
+                <player-moves
+                    v-if="game.opponent !== null"
+                    v-bind:player='player'
+                ></player-moves>
+            </div>
+            <div v-if="game.opponent === null">
+                <p>Select opponent:</p>
+                <opponent-summary v-for='opponent in opponents' v-bind:opponent='opponent'></opponent-summary>
+            </div>
+            <div v-else>
+                <opponent v-bind:opponent='game.opponent'></opponent>
+            </div>
         </div>
     </div>
     <script type='text/javascript' src='js/vue.min.js'></script>
