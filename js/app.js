@@ -127,7 +127,7 @@ let opponentMoves = [
 
 let game = {
     player: player,
-    ant: ant,
+    opponent: null,
     nextPlayerMove: -1,
     nextAntMove: 0
 };
@@ -216,9 +216,13 @@ function updateUI(game) {
     document.getElementById('ant-move-details').appendChild(createMoveDetails(game.ant, antMoves[game.nextAntMove]));
 }
 
+function getNextOpponentMove() {
+    let i = getRandomInt(0, opponentMoves.length - 1);
+    return opponentMoves[i];
+}
+
 function prepareNextTurn(game) {
-    let antMove = getRandomInt(0, antMoves.length - 1);
-    game.nextAntMove = antMove;
+    game.opponent.nextMove = getNextOpponentMove();
     updateUI(game);
 }
 
@@ -251,7 +255,7 @@ function init(game) {
 }
 
 function startBattleWith (opponent) {
-    currentOpponent.current = { ...opponent, moves: opponentMoves };
+    currentOpponent.current = { ...opponent, nextMove: getNextOpponentMove(), moves: opponentMoves };
 }
 
 Vue.component('health-bar', {
@@ -302,11 +306,11 @@ Vue.component('opponent', {
         <div class='unit-window'> 
             <h2>The guy she tells you not to worry about</h2>
             <img v-bind:src='opponent.imageUrl'>
-            <div>HP: <span id='ant-hp'></span></div>
-            <div>Current block: <span id='ant-current-block'></span></div>
-            <div>Next move: <span id='next-ant-move'></span></div>
+            <div>HP: {{ opponent.hp }}</div>
+            <div>Current block: {{ opponent.block }}</span></div>
+            <div>Next move: {{ opponent.nextMove.name }}</div>
             <h2>Move details</h2>
-            <div id='ant-move-details'>
+            <move-details v-if='opponent.nextMove !== null' v-bind:player='opponent'></move-details>
             </div>
         </div>
 `
@@ -317,6 +321,7 @@ var scene = new Vue({
     data: {
         player: { ...player, nextMove: null,  moves: playerMoves },
         opponent: currentOpponent,
-        opponents: opponents
+        opponents: opponents,
+        game: game
     }
 });
