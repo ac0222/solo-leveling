@@ -98,7 +98,7 @@ let playerMoves = [
     },
 ];
 
-let antMoves = [
+let opponentMoves = [
     {
         name: 'claw',
         damage: 10,
@@ -251,7 +251,7 @@ function init(game) {
 }
 
 function startBattleWith (opponent) {
-    currentOpponent.current = opponent;
+    currentOpponent.current = { ...opponent, moves: opponentMoves };
 }
 
 Vue.component('health-bar', {
@@ -261,13 +261,61 @@ Vue.component('health-bar', {
 
 Vue.component('opponent-summary', {
     props: ['opponent'],
-    template: '<button v-on:click="startBattleWith(opponent.name)"><ul><li>Name: {{opponent.name}} </li><li>Level: {{ opponent.level }}</li><li>HP: {{ opponent.hp }}</li><li>EXP: {{ opponent.exp }}</li><li><img v-bind:src="opponent.imageUrl"></li></ul></button>'
+    template: '<button v-on:click="startBattleWith(opponent)"><ul><li>Name: {{opponent.name}} </li><li>Level: {{ opponent.level }}</li><li>HP: {{ opponent.hp }}</li><li>EXP: {{ opponent.exp }}</li><li><img v-bind:src="opponent.imageUrl"></li></ul></button>'
+});
+
+Vue.component('move-details', {
+    props: ['player'],
+    template: `
+    <div>
+        <div>Attack for: {{ player.nextMove.damage > 0 ? player.atk + player.nextMove.damage : 0 }}</div>
+        <div>Block for: {{ player.nextMove.block > 0 ? player.def + player.nextMove.block : 0 }}</div>
+        <div>Heal for: {{ player.nextMove.heal }}</div>
+        <div>Buff defense for: {{ player.nextMove.buffDef }}</div>
+        <div>Buff attack for: {{ player.nextMove.buffAtk }}</div>
+    </div>
+`
+});
+
+Vue.component('player-moves', {
+    props: ['player'],
+    template: `
+        <div class='unit-window'>
+            <h2>Your moves</h2>
+            <div id='player-moves'>
+                <button
+                    v-for='move in player.moves'
+                    v-on:click='function () { player.nextMove=move; }'
+                >{{move.name}}</button>
+            </div>
+            <h2>Move details</h2>
+            <move-details v-if='player.nextMove !== null' v-bind:player='player'></move-details>
+            <button id='end-turn'>Go</button>
+            <div id='warning-message'></div>
+        </div>
+`
+});
+
+Vue.component('opponent', {
+    props: ['opponent'],
+    template: `
+        <div class='unit-window'> 
+            <h2>The guy she tells you not to worry about</h2>
+            <img v-bind:src='opponent.imageUrl'>
+            <div>HP: <span id='ant-hp'></span></div>
+            <div>Current block: <span id='ant-current-block'></span></div>
+            <div>Next move: <span id='next-ant-move'></span></div>
+            <h2>Move details</h2>
+            <div id='ant-move-details'>
+            </div>
+        </div>
+`
 });
 
 var scene = new Vue({
     el: '#scene',
     data: {
-        player: player,
+        player: { ...player, nextMove: null,  moves: playerMoves },
         opponent: currentOpponent,
         opponents: opponents
     }
