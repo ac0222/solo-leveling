@@ -7,30 +7,40 @@
 </head>
 <body>
     <h1>SOLO LEVELING</h1>
-    <div class='game-window'>
-        <div class='unit-window'>
-            <h2>You</h2>
-            <img src='assets/player.jpg'/>
-            <div>HP: <span id='player-hp'></span></div>
-            <h2>Your moves</h2>
-            <div id='player-moves'></div>
-            <h2>Move details</h2>
-            <div id='player-move-details'>
-            </div>
-            <button id='end-turn'>Go</button>
-            <div id='warning-message'></div>
+    <div id='scene'>
+        <health-bar v-bind:player='player'></health-bar>
+        <div v-if="opponent.current === null">
+            <p>Select opponent:</p>
+            <opponent-summary v-for='opponent in opponents' v-bind:opponent='opponent'></opponent-summary>
         </div>
-        <div class='unit-window'> 
-            <h2>The guy she tells you not to worry about</h2>
-            <img src='assets/ant.png' />
-            <div>HP: <span id='ant-hp'></span></div>
-            <div>Current block: <span id='ant-current-block'></span></div>
-            <div>Next move: <span id='next-ant-move'></span></div>
-            <h2>Move details</h2>
-            <div id='ant-move-details'>
+        <div v-else>
+            <div class='game-window'>
+                <div class='unit-window'>
+                    <h2>You</h2>
+                    <img src='assets/player.jpg'/>
+                    <div>HP: <span id='player-hp'></span></div>
+                    <h2>Your moves</h2>
+                    <div id='player-moves'></div>
+                    <h2>Move details</h2>
+                    <div id='player-move-details'>
+                    </div>
+                    <button id='end-turn'>Go</button>
+                    <div id='warning-message'></div>
+                </div>
+                <div class='unit-window'> 
+                    <h2>The guy she tells you not to worry about</h2>
+                    <img src='assets/ant.png' />
+                    <div>HP: <span id='ant-hp'></span></div>
+                    <div>Current block: <span id='ant-current-block'></span></div>
+                    <div>Next move: <span id='next-ant-move'></span></div>
+                    <h2>Move details</h2>
+                    <div id='ant-move-details'>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script type='text/javascript' src='js/vue.min.js'></script>
     <script type='text/javascript' src='js/app.js'></script>
 </body>
 </html>

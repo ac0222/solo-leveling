@@ -1,16 +1,67 @@
 let player = {
-    hitpoints: 50,
+    level: 0,
+    currentExp: 0,
+    maxExp: 10,
+    currentHp: 50,
+    maxHp: 50,
     atk: 5,
     def: 5,
-    block: 0
+    block: 0,
+    imageUrl: 'assets/sungjinwoo.png'
+};
+
+let goblin = {
+    name: 'Goblin person',
+    level: 1,
+    exp: 10, // Exp gained if killed by player
+    hp: 50,
+    atk: 5,
+    def: 5,
+    block: 0,
+    imageUrl: 'assets/goblin.png'
+};
+
+let orc = {
+    name: 'Orc person',
+    level: 1000,
+    exp: 10, // Exp gained if killed by player
+    hp: 50,
+    atk: 5,
+    def: 5,
+    block: 0,
+    imageUrl: 'assets/tusk.jpg'
 };
 
 let ant = {
-    hitpoints: 50,
+    name: 'Ant person',
+    level: 9000,
+    exp: 10, // Exp gained if killed by player
+    hp: 50,
     atk: 5,
     def: 5,
-    block: 0
+    block: 0,
+    imageUrl: 'assets/ant.png'
 };
+
+let big_boss = {
+    name: 'Statue person',
+    level: 1000000,
+    exp: 10, // Exp gained if killed by player
+    hp: 50,
+    atk: 5,
+    def: 5,
+    block: 0,
+    imageUrl: 'assets/scary_statue.png'
+};
+
+let opponents = [
+    goblin,
+    orc,
+    ant,
+    big_boss
+];
+
+let currentOpponent = { current: null };
 
 let playerMoves = [
     {
@@ -199,4 +250,25 @@ function init(game) {
     prepareNextTurn(game);
 }
 
-init(game);
+function startBattleWith (opponent) {
+    currentOpponent.current = opponent;
+}
+
+Vue.component('health-bar', {
+    props: ['player'],
+    template: '<ul><li>You</li><li>Level: {{ player.level }}</li><li>HP: {{ player.currentHp }}/{{ player.maxHp }}</li><li>EXP: {{ player.currentExp }}/{{ player.maxExp }}</li><li><img v-bind:src="player.imageUrl"></li></ul>'
+});
+
+Vue.component('opponent-summary', {
+    props: ['opponent'],
+    template: '<button v-on:click="startBattleWith(opponent.name)"><ul><li>Name: {{opponent.name}} </li><li>Level: {{ opponent.level }}</li><li>HP: {{ opponent.hp }}</li><li>EXP: {{ opponent.exp }}</li><li><img v-bind:src="opponent.imageUrl"></li></ul></button>'
+});
+
+var scene = new Vue({
+    el: '#scene',
+    data: {
+        player: player,
+        opponent: currentOpponent,
+        opponents: opponents
+    }
+});
