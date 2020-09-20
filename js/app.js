@@ -44,7 +44,8 @@ let player = {
     imageUrl: 'assets/sungjinwoo.png',
     nextMove: null,
     moves: playerMoves,
-    warningMessage: '' 
+    warningMessage: '',
+    canLevelUp: false
 };
 
 let goblin = {
@@ -61,10 +62,10 @@ let goblin = {
 let orc = {
     name: 'Orc person',
     level: 1000,
-    exp: 10, // Exp gained if killed by player
-    hp: 50,
-    atk: 5,
-    def: 5,
+    exp: 100, // Exp gained if killed by player
+    hp: 1000,
+    atk: 20,
+    def: 20,
     block: 0,
     imageUrl: 'assets/tusk.jpg'
 };
@@ -72,10 +73,10 @@ let orc = {
 let ant = {
     name: 'Ant person',
     level: 9000,
-    exp: 10, // Exp gained if killed by player
-    hp: 50,
-    atk: 5,
-    def: 5,
+    exp: 1000, // Exp gained if killed by player
+    hp: 10000,
+    atk: 1000,
+    def: 1000,
     block: 0,
     imageUrl: 'assets/ant.png'
 };
@@ -83,10 +84,10 @@ let ant = {
 let big_boss = {
     name: 'Statue person',
     level: 1000000,
-    exp: 10, // Exp gained if killed by player
-    hp: 50,
-    atk: 5,
-    def: 5,
+    exp: 10000, // Exp gained if killed by player
+    hp: 1000000,
+    atk: 10000,
+    def: 10000,
     block: 0,
     imageUrl: 'assets/scary_statue.png'
 };
@@ -132,6 +133,11 @@ let game = {
 
 let activityLog = ''
 
+function resetPlayerStats(player) {
+    player.atk = 5;
+    player.def = 5;
+}
+
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -159,13 +165,21 @@ function runGame(game) {
     let res = runTurn(game);
     if (res !== 'continue') {
         if (res === 'win') {
-            game.player.currentExp += game.opponent.exp;
-            while (game.player.currentExp >= game.player.maxExp) { // Level up!
-                game.player.level += 1;
-                game.player.hp += 50;
-                game.player.atk += 1;
-                game.player.def += 1;
-                game.player.currentExp -= game.player.maxExp;
+            if (game.player.canLevelUp) {
+                game.player.currentExp += game.opponent.exp;
+                while (game.player.currentExp >= game.player.maxExp) { // Level up!
+                    game.player.level += 1;
+                    game.player.hp += 50;
+                    game.player.atk += 1;
+                    game.player.def += 1;
+                    game.player.currentExp -= game.player.maxExp;
+
+                    if (game.player.level >= 100) {
+                        game.player.imageUrl = 'assets/sungjinwoo100.jpg';
+                    }
+                }
+            } else {
+                resetPlayerStats(game.player); // Can't level up if not player...
             }
             game.opponent = null;
         }
@@ -223,7 +237,7 @@ function startBattleWith (opponent) {
 
 Vue.component('health-bar', {
     props: ['player'],
-    template: '<div><h2>You</h2><div><img v-bind:src="player.imageUrl"></div><div>Level: {{ player.level }}</div><div>HP: {{ player.hp }}</div><div>EXP: {{ player.currentExp }}/{{ player.maxExp }}</div></div>'
+    template: '<div><h2>You</h2><div><img v-bind:src="player.imageUrl"></div><div v-if="player.canLevelUp">Level: {{ player.level }}</div><div>HP: {{ player.hp }}</div><div v-if="player.canLevelUp">EXP: {{ player.currentExp }}/{{ player.maxExp }}</div></div>'
 });
 
 Vue.component('opponent-summary', {

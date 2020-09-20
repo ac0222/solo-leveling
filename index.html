@@ -8,7 +8,11 @@
 <body>
     <h1>SOLO LEVELING</h1>
     <div id='scene'>
-        <div v-if='player.hp == 0'>
+        <div v-if='!player.canLevelUp && player.hp == 0 && game.opponent !== null &&  game.opponent.name == "Statue person"'>
+            <p>You're about to die! Do you want to become a player?</p>
+            <button v-on:click='player.hp = 50; player.canLevelUp = true; game.opponent = null;'>Yes</button><button v-on:click='game.opponent = null;'>No</button>
+        </div>
+        <div v-else-if='player.hp == 0 '>
             Game over, you dead!
         </div>
         <div v-else class='game-window'>
