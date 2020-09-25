@@ -294,8 +294,44 @@ Vue.component('opponent', {
 `
 });
 
+Vue.component('scene', {
+    props: [
+        'player',
+        'opponents',
+        'game'
+    ],
+    template: `
+        <div>
+            <div v-if='!player.canLevelUp && player.hp == 0 && game.opponent !== null &&  game.opponent.name == "Statue person"'>
+                <p>You're about to die! Do you want to become a player?</p>
+                <button v-on:click='player.hp = 50; player.canLevelUp = true; game.opponent = null;'>Yes</button>
+                <button v-on:click='game.opponent = null;'>No</button>
+            </div>
+            <div v-else-if='player.hp == 0 '>
+                Game over, you dead!
+            </div>
+            <div v-else class='game-window'>
+                <div>
+                    <health-bar v-bind:player='player'></health-bar>
+                    <player-moves
+                        v-if="game.opponent !== null"
+                        v-bind:player='player'
+                    ></player-moves>
+                </div>
+                <div v-if="game.opponent === null">
+                    <p>Select opponent:</p>
+                    <opponent-summary v-for='opponent in opponents' v-bind:opponent='opponent'></opponent-summary>
+                </div>
+                <div v-else>
+                    <opponent v-bind:opponent='game.opponent'></opponent>
+                </div>
+            </div>
+        </div>
+    `
+});
+
 var scene = new Vue({
-    el: '#scene',
+    el: '#game-window',
     data: {
         player: player,
         opponents: opponents,
