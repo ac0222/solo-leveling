@@ -170,12 +170,12 @@ Vue.component('dungeon-cells', {
     ],
     template: `
     <div class='dungeon-grid'>
-        <div v-for='i in DUNGEON_SIZE*DUNGEON_SIZE' class='dungeon-cell'>
+        <template v-for='i in DUNGEON_SIZE*DUNGEON_SIZE'>
             <dungeon-cell
                 v-bind:cell='dungeon.cells[Math.floor((i-1)/DUNGEON_SIZE)][(i-1) % DUNGEON_SIZE]'
                 v-bind:gameController='gameController'
             ></dungeon-cell>
-        </div>
+        </template>
     </div>
     `
 });
@@ -186,7 +186,7 @@ Vue.component('dungeon-cell', {
         'gameController'
     ],
     template: `
-    <div>
+    <div v-on:click='gameController.selectCell(cell)' class='dungeon-cell'>
         {{cell.units.length}}
         <img class='cell-thumbnail' v-if='cell.units.length > 0' v-bind:src='cell.units[0].imageUrl' />
     </div>
@@ -201,10 +201,24 @@ Vue.component('dungeon', {
     template: `
     <div>
         <div v-if='!dungeon.isBattleInProgress()'>
-            <dungeon-cells
-                v-bind:dungeon='dungeon'
-                v-bind:gameController='gameController'>
-            </dungeon-cells>
+            <div class='dungeon-window'>
+                <div>
+                    <health-bar v-bind:player='dungeon.player'></health-bar>
+                    <div>
+                        <button>Move to selected cell</button>
+                        <button>Rest: Heal 5% of your HP</button>
+                    </div>
+                    <cell-info
+                        v-bind:cell='dungeon.selectedCell'
+                        v-bind:gameController='gameController'
+                    ></cell-info>
+                    <h2>Days until the boss awakens: 10</h2>
+                </div>
+                <dungeon-cells
+                    v-bind:dungeon='dungeon'
+                    v-bind:gameController='gameController'>
+                </dungeon-cells>
+            </div>
         </div>
         <div v-else>
             <battle
@@ -212,6 +226,27 @@ Vue.component('dungeon', {
                 v-bind:gameController='gameController'
             >
             </battle>
+        </div>
+    </div>
+    `
+});
+
+Vue.component('cell-info', {
+    props: [
+        'cell',
+        'gameController'
+    ],
+    template: `
+    <div>
+        <h2>Location info:</h2>
+        <div v-if='cell===null'>
+            No location selected
+        </div>
+        <div v-else-if='cell.isEmpty()'>
+            Nothing here...seems pretty safe.
+        </div>
+        <div v-else-if='cell.units.length > 0'>
+            Baddies nearby. Moving to this cell will start a battle immediately
         </div>
     </div>
     `

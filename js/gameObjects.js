@@ -147,6 +147,7 @@ class Dungeon {
         this.monsters = monsters;
         this.currentBattle = null;
         this.cells = [];
+        this.selectedCell = null;
         this.init();
     }
 
@@ -176,6 +177,7 @@ class Dungeon {
             cells[randX][randY].units.push(monster);
         }
         this.cells = cells;
+        this.selectedCell = null;
     }
 }
 

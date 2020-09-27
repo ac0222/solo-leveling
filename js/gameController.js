@@ -12,6 +12,10 @@ class GameController {
         this.game.dungeon.startBattleWith(opponent);
     }
 
+    selectCell(cell) {
+        this.game.dungeon.selectedCell = cell;
+    }
+
     // battle commands
     selectPlayerMove(moveKey) {
         this.game.dungeon.currentBattle.player.setNextMove(moveKey);
