@@ -1,3 +1,5 @@
+const DUNGEON_SIZE = 5;
+
 class Hunter {
     constructor(level, hp, atk, def, block, imageUrl) {
         this.level = level;
@@ -144,8 +146,6 @@ class Dungeon {
         this.player = player;
         this.monsters = monsters;
         this.currentBattle = null;
-        this.width = width;
-        this.height = height;
         this.cells = [];
         this.init();
     }
@@ -160,9 +160,9 @@ class Dungeon {
 
     init() {
         let cells = [];
-        for (let i = 0; i < this.width; i++) {
+        for (let i = 0; i < DUNGEON_SIZE; i++) {
             let row = [];
-            for (let j = 0; j < this.height; j++) {
+            for (let j = 0; j < DUNGEON_SIZE; j++) {
                 let newCell = new DungeonCell(i, j, [], []);
                 row.push(newCell);
             }
@@ -171,8 +171,8 @@ class Dungeon {
         // place units in the cells
         cells[0][0].units.push(this.player);
         for (let monster of this.monsters) {
-            let randX = getRandomInt(1, this.width-1);
-            let randY = getRandomInt(1, this.height-1);
+            let randX = getRandomInt(1, DUNGEON_SIZE-1);
+            let randY = getRandomInt(1, DUNGEON_SIZE-1);
             cells[randX][randY].units.push(monster);
         }
         this.cells = cells;

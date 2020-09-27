@@ -162,6 +162,37 @@ Vue.component('become-player', {
     `
 });
 
+
+Vue.component('dungeon-cells', {
+    props: [
+        'dungeon',
+        'gameController'
+    ],
+    template: `
+    <div class='dungeon-grid'>
+        <div v-for='i in DUNGEON_SIZE*DUNGEON_SIZE' class='dungeon-cell'>
+            <dungeon-cell
+                v-bind:cell='dungeon.cells[Math.floor((i-1)/DUNGEON_SIZE)][(i-1) % DUNGEON_SIZE]'
+                v-bind:gameController='gameController'
+            ></dungeon-cell>
+        </div>
+    </div>
+    `
+});
+
+Vue.component('dungeon-cell', {
+    props: [
+        'cell',
+        'gameController'
+    ],
+    template: `
+    <div>
+        {{cell.units.length}}
+        <img class='cell-thumbnail' v-if='cell.units.length > 0' v-bind:src='cell.units[0].imageUrl' />
+    </div>
+    `
+})
+
 Vue.component('dungeon', {
     props: [
         'dungeon',
@@ -170,14 +201,10 @@ Vue.component('dungeon', {
     template: `
     <div>
         <div v-if='!dungeon.isBattleInProgress()'>
-            <div class='dungeon-window'>
-                <health-bar v-bind:player='dungeon.player'></health-bar>
-                <battle-select 
-                    v-bind:monsters='dungeon.monsters'
-                    v-bind:gameController='gameController'
-                >
-                </battle-select>
-            </div>
+            <dungeon-cells
+                v-bind:dungeon='dungeon'
+                v-bind:gameController='gameController'>
+            </dungeon-cells>
         </div>
         <div v-else>
             <battle

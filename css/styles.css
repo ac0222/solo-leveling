@@ -52,4 +52,21 @@ img {
 .modal-default-button {
     float: right;
 }
-  
+
+.dungeon-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    width: 525px;
+}
+
+.dungeon-cell {
+    border: 2px solid;
+    background: aliceblue;
+    height: 100px;
+    width: 100px;
+    margin: 5px;
+}
+
+.cell-thumbnail {
+    height: 75px;
+}
