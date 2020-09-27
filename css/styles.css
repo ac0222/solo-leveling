@@ -70,3 +70,7 @@ img {
 .cell-thumbnail {
     height: 75px;
 }
+
+.selected-cell {
+    background-color: lightgreen;
+}

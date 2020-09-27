@@ -186,7 +186,7 @@ Vue.component('dungeon-cell', {
         'gameController'
     ],
     template: `
-    <div v-on:click='gameController.selectCell(cell)' class='dungeon-cell'>
+    <div v-on:click='gameController.selectCell(cell)' class='dungeon-cell' v-bind:class="{ 'selected-cell': cell.isSelected  }">
         {{cell.units.length}}
         <img class='cell-thumbnail' v-if='cell.units.length > 0' v-bind:src='cell.units[0].imageUrl' />
     </div>
@@ -244,6 +244,9 @@ Vue.component('cell-info', {
         </div>
         <div v-else-if='cell.isEmpty()'>
             Nothing here...seems pretty safe.
+        </div>
+        <div v-else-if='cell.units.length > 0 && cell.units[0].isPlayer'>
+            Your current location.
         </div>
         <div v-else-if='cell.units.length > 0'>
             Baddies nearby. Moving to this cell will start a battle immediately

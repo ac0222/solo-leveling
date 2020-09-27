@@ -13,7 +13,14 @@ class GameController {
     }
 
     selectCell(cell) {
+        // deselect old cell
+        if (this.game.dungeon.selectedCell) {
+            this.game.dungeon.selectedCell.isSelected = false;;
+        }
+        // select the new cell
         this.game.dungeon.selectedCell = cell;
+        this.game.dungeon.selectedCell.isSelected = true;
+
     }
 
     // battle commands

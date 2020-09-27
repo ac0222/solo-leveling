@@ -8,6 +8,7 @@ class Hunter {
         this.def = def;
         this.block = block;
         this.imageUrl = imageUrl;
+        this.isPlayer = false;
     }
 }
 
@@ -25,6 +26,7 @@ class Player extends Hunter {
         this.nextMove = null;
         this.warningMessage = '';
         this.canLevelUp = false;
+        this.isPlayer = true;
     }
 
     setNextMove(move) {
@@ -186,6 +188,7 @@ class DungeonCell {
         this.x = x;
         this.y = y;
         this.units = units;
+        this.isSelected = false;
         this.materials = materials;
     }
 
