@@ -186,8 +186,10 @@ Vue.component('dungeon-cell', {
         'gameController'
     ],
     template: `
-    <div v-on:click='gameController.selectCell(cell)' class='dungeon-cell' v-bind:class="{ 'selected-cell': cell.isSelected  }">
-        {{cell.units.length}}
+    <div 
+        v-on:click='gameController.selectCell(cell)' 
+        class='dungeon-cell' 
+        v-bind:class="{ 'selected-cell': cell.isSelected, 'destination-cell': gameController.canMovePlayerToCell(cell) }">
         <img class='cell-thumbnail' v-if='cell.units.length > 0' v-bind:src='cell.units[0].imageUrl' />
     </div>
     `
@@ -205,7 +207,11 @@ Vue.component('dungeon', {
                 <div>
                     <health-bar v-bind:player='dungeon.player'></health-bar>
                     <div>
-                        <button v-on:click='gameController.movePlayerToCell(dungeon.selectedCell)'>Move to selected cell</button>
+                        <button 
+                            v-if='dungeon.selectedCell && gameController.canMovePlayerToCell(dungeon.selectedCell)'
+                            v-on:click='gameController.movePlayerToCell(dungeon.selectedCell)'>
+                            Move to selected cell
+                        </button>
                         <button v-on:click='gameController.rest()'>Rest: Heal 5% of your HP</button>
                     </div>
                     <cell-info

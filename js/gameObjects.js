@@ -178,6 +178,12 @@ class Dungeon {
         }
     }
 
+    canMovePlayerToCell (cell) {
+        let dx = Math.abs(cell.x - this.playerLocation.x) ;
+        let dy = Math.abs(cell.y - this.playerLocation.y);
+        return dx <= 1 && dy <= 1 && (dx + dy != 0);
+    }
+
     init() {
         let cells = [];
         for (let i = 0; i < DUNGEON_SIZE; i++) {

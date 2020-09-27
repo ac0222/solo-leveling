@@ -27,6 +27,10 @@ class GameController {
         this.game.player.rest();
     }
 
+    canMovePlayerToCell(cell) {
+        return this.game.dungeon.canMovePlayerToCell(cell);
+    }
+
     // battle commands
     selectPlayerMove(moveKey) {
         this.game.dungeon.currentBattle.player.setNextMove(moveKey);

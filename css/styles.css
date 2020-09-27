@@ -71,6 +71,10 @@ img {
     height: 75px;
 }
 
+.destination-cell {
+    background-color: lightyellow;
+}
+
 .selected-cell {
     background-color: lightgreen;
 }
