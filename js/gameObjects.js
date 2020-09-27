@@ -47,6 +47,10 @@ class Player extends Hunter {
         }
     }
 
+    rest() {
+        this.hp = Math.min(50, this.hp + Math.floor(this.hp * 0.05));
+    }
+
     becomePlayer() {
         this.hp = 50; 
         this.canLevelUp = true;
@@ -82,7 +86,7 @@ class MonsterFactory {
     static create(monsterType) {
         let newMonster = null;
         if (monsterType === 'goblin') {
-            newMonster = new Monster(monsterType, 'Goblin person', 1, 50, 5, 5, 0, 'assets/goblin.png', 5);
+            newMonster = new Monster(monsterType, 'Goblin person', 1, 1, 5, 5, 0, 'assets/goblin.png', 5);
         } else if (monsterType === 'orc') {
             newMonster = new Monster(monsterType, 'Orc person', 100, 1000, 20, 20, 0, 'assets/tusk.jpg', 100);
         } else if (monsterType === 'ant') {
@@ -150,6 +154,7 @@ class Dungeon {
         this.currentBattle = null;
         this.cells = [];
         this.selectedCell = null;
+        this.playerLocation = null;
         this.init();
     }
 
@@ -157,8 +162,20 @@ class Dungeon {
         return this.currentBattle && this.currentBattle.status !== 'resolved';
     }
 
-    startBattleWith (opponent) {
-        this.currentBattle = new Battle(this.player, MonsterFactory.create(opponent.monsterType));
+    startBattleWith (opponent, location) {
+        this.currentBattle = new Battle(this.player, MonsterFactory.create(opponent.monsterType), location);
+    }
+
+    movePlayerToCell (cell) {
+        // remove player from old cell
+        this.playerLocation.units = [];
+        // put them in the new cell
+        cell.units.push(this.player);
+        this.playerLocation = cell;
+        // immediately start battle if there are monsters in the new cell
+        if (cell.units.length > 1) {
+            this.startBattleWith(cell.units[0], cell);
+        }
     }
 
     init() {
@@ -180,6 +197,7 @@ class Dungeon {
         }
         this.cells = cells;
         this.selectedCell = null;
+        this.playerLocation = this.cells[0][0];
     }
 }
 
@@ -198,10 +216,11 @@ class DungeonCell {
 }
 
 class Battle {
-    constructor(player, monster) {
+    constructor(player, monster, location) {
         this.player = player;
         this.monster = monster;
         this.status = 'incomplete'
+        this.location = location;
         this.initBattle();
     }
 
@@ -243,6 +262,7 @@ class Battle {
         if (this.status !== 'incomplete' && this.status !== 'resolved') {
             // grant exp to the player if they won
             if (this.status === 'win') {
+                this.location.units = [this.player];
                 if (this.player.canLevelUp) {
                     this.player.currentExp += this.monster.exp;
                     this.player.levelUp();

@@ -8,10 +8,6 @@ class GameController {
     }
 
     // dungeon commands
-    startBattleWith(opponent) {
-        this.game.dungeon.startBattleWith(opponent);
-    }
-
     selectCell(cell) {
         // deselect old cell
         if (this.game.dungeon.selectedCell) {
@@ -21,6 +17,14 @@ class GameController {
         this.game.dungeon.selectedCell = cell;
         this.game.dungeon.selectedCell.isSelected = true;
 
+    }
+
+    movePlayerToCell(cell) {
+        this.game.dungeon.movePlayerToCell(cell);
+    }
+
+    rest() {
+        this.game.player.rest();
     }
 
     // battle commands

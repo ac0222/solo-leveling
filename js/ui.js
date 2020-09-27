@@ -205,8 +205,8 @@ Vue.component('dungeon', {
                 <div>
                     <health-bar v-bind:player='dungeon.player'></health-bar>
                     <div>
-                        <button>Move to selected cell</button>
-                        <button>Rest: Heal 5% of your HP</button>
+                        <button v-on:click='gameController.movePlayerToCell(dungeon.selectedCell)'>Move to selected cell</button>
+                        <button v-on:click='gameController.rest()'>Rest: Heal 5% of your HP</button>
                     </div>
                     <cell-info
                         v-bind:cell='dungeon.selectedCell'
