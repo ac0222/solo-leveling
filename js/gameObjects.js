@@ -86,7 +86,7 @@ class MonsterFactory {
     static create(monsterType) {
         let newMonster = null;
         if (monsterType === 'goblin') {
-            newMonster = new Monster(monsterType, 'Goblin person', 1, 1, 5, 5, 0, 'assets/goblin.png', 5);
+            newMonster = new Monster(monsterType, 'Goblin person', 1, 50, 5, 5, 0, 'assets/goblin.png', 5);
         } else if (monsterType === 'orc') {
             newMonster = new Monster(monsterType, 'Orc person', 100, 1000, 20, 20, 0, 'assets/tusk.jpg', 100);
         } else if (monsterType === 'ant') {
@@ -168,7 +168,7 @@ class Dungeon {
 
     movePlayerToCell (cell) {
         // remove player from old cell
-        this.playerLocation.units = [];
+        this.playerLocation.units = this.playerLocation.units.filter(x => !x.isPlayer);
         // put them in the new cell
         cell.units.push(this.player);
         this.playerLocation = cell;

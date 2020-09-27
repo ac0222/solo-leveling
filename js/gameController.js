@@ -50,6 +50,7 @@ class GameController {
     acceptTransform() {
         this.game.player.becomePlayer();
         this.game.dungeon.currentBattle.status = 'resolved';
+        this.movePlayerToCell(this.game.dungeon.cells[0][0]);
         this.showBecomePlayerModal = false;
     }
 
