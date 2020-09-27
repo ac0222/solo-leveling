@@ -140,10 +140,14 @@ let allMoves = {
 }
 
 class Dungeon {
-    constructor(player, monsters) {
+    constructor(player, monsters, width, height) {
         this.player = player;
         this.monsters = monsters;
         this.currentBattle = null;
+        this.width = width;
+        this.height = height;
+        this.cells = [];
+        this.init();
     }
 
     isBattleInProgress () {
@@ -152,6 +156,39 @@ class Dungeon {
 
     startBattleWith (opponent) {
         this.currentBattle = new Battle(this.player, MonsterFactory.create(opponent.monsterType));
+    }
+
+    init() {
+        let cells = [];
+        for (let i = 0; i < this.width; i++) {
+            let row = [];
+            for (let j = 0; j < this.height; j++) {
+                let newCell = new DungeonCell(i, j, [], []);
+                row.push(newCell);
+            }
+            cells.push(row);
+        }
+        // place units in the cells
+        cells[0][0].units.push(this.player);
+        for (let monster of this.monsters) {
+            let randX = getRandomInt(1, this.width-1);
+            let randY = getRandomInt(1, this.height-1);
+            cells[randX][randY].units.push(monster);
+        }
+        this.cells = cells;
+    }
+}
+
+class DungeonCell {
+    constructor(x, y, units, materials) {
+        this.x = x;
+        this.y = y;
+        this.units = units;
+        this.materials = materials;
+    }
+
+    isEmpty() {
+        return this.units.length == 0;
     }
 }
 
@@ -242,6 +279,6 @@ class SoloLevelingGame {
             MonsterFactory.create('ant'), 
             MonsterFactory.create('statue')
         ] 
-        this.dungeon = new Dungeon(this.player, monsters);
+        this.dungeon = new Dungeon(this.player, monsters, 5, 5);
     }
 }
