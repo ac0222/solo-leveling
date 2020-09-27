@@ -190,10 +190,14 @@ class Dungeon {
         }
         // place units in the cells
         cells[0][0].units.push(this.player);
-        for (let monster of this.monsters) {
-            let randX = getRandomInt(1, DUNGEON_SIZE-1);
-            let randY = getRandomInt(1, DUNGEON_SIZE-1);
-            cells[randX][randY].units.push(monster);
+        let monsterLocations = getRandomSubarray([...Array(DUNGEON_SIZE**2).keys()].slice(1), this.monsters.length);
+        console.log(monsterLocations);
+        for (let i = 0; i < monsterLocations.length; i++) {
+            let monster = this.monsters[i];
+            let locIndex = monsterLocations[i];
+            let x = Math.floor(locIndex/DUNGEON_SIZE);
+            let y= locIndex % DUNGEON_SIZE;
+            cells[x][y].units.push(monster);
         }
         this.cells = cells;
         this.selectedCell = null;
