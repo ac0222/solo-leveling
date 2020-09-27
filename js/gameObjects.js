@@ -172,6 +172,7 @@ class Dungeon {
         // put them in the new cell
         cell.units.push(this.player);
         this.playerLocation = cell;
+        this.revealAdjacentCells(cell);
         // immediately start battle if there are monsters in the new cell
         if (cell.units.length > 1) {
             this.startBattleWith(cell.units[0], cell);
@@ -182,6 +183,18 @@ class Dungeon {
         let dx = Math.abs(cell.x - this.playerLocation.x) ;
         let dy = Math.abs(cell.y - this.playerLocation.y);
         return dx <= 1 && dy <= 1 && (dx + dy != 0);
+    }
+
+    revealAdjacentCells (cell) {
+        for (let i = -1; i < 2; i++) {
+            for (let j = -1; j < 2; j++) {
+                let x = cell.x + i;
+                let y = cell.y + j;
+                if (x >= 0 && x < DUNGEON_SIZE && y >= 0 && y < DUNGEON_SIZE) {
+                    this.cells[x][y].isRevealed = true;
+                }
+            }
+        }
     }
 
     init() {
@@ -197,7 +210,6 @@ class Dungeon {
         // place units in the cells
         cells[0][0].units.push(this.player);
         let monsterLocations = getRandomSubarray([...Array(DUNGEON_SIZE**2).keys()].slice(1), this.monsters.length);
-        console.log(monsterLocations);
         for (let i = 0; i < monsterLocations.length; i++) {
             let monster = this.monsters[i];
             let locIndex = monsterLocations[i];
@@ -208,6 +220,7 @@ class Dungeon {
         this.cells = cells;
         this.selectedCell = null;
         this.playerLocation = this.cells[0][0];
+        this.revealAdjacentCells(this.playerLocation);
     }
 }
 
@@ -217,6 +230,7 @@ class DungeonCell {
         this.y = y;
         this.units = units;
         this.isSelected = false;
+        this.isRevealed = false;
         this.materials = materials;
     }
 

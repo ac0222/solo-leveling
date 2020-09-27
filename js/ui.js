@@ -189,8 +189,12 @@ Vue.component('dungeon-cell', {
     <div 
         v-on:click='gameController.selectCell(cell)' 
         class='dungeon-cell' 
-        v-bind:class="{ 'selected-cell': cell.isSelected, 'destination-cell': gameController.canMovePlayerToCell(cell) }">
-        <img class='cell-thumbnail' v-if='cell.units.length > 0' v-bind:src='cell.units[0].imageUrl' />
+        v-bind:class="{ 
+            'selected-cell': cell.isSelected, 
+            'destination-cell': gameController.canMovePlayerToCell(cell) 
+        }">
+        <img class='cell-thumbnail' v-if='cell.isRevealed && cell.units.length > 0' v-bind:src='cell.units[0].imageUrl' />
+        <img class='cell-thumbnail' v-if='!cell.isRevealed' v-bind:src='"assets/mystery.png"' />
     </div>
     `
 })
@@ -247,6 +251,9 @@ Vue.component('cell-info', {
         <h2>Location info:</h2>
         <div v-if='cell===null'>
             No location selected
+        </div>
+        <div v-else-if='!cell.isRevealed'>
+            It's a mystery...move closer to find out what's here.
         </div>
         <div v-else-if='cell.isEmpty()'>
             Nothing here...seems pretty safe.
