@@ -96,9 +96,6 @@ Vue.component('solo-leveling', {
             v-bind:gameController='gameController'
         >
         </dungeon>
-        <div class='game-window'>
-           
-        </div>
     </div>
     `
 });
@@ -173,12 +170,14 @@ Vue.component('dungeon', {
     template: `
     <div>
         <div v-if='!dungeon.isBattleInProgress()'>
-            <health-bar v-bind:player='dungeon.player'></health-bar>
-            <battle-select 
-                v-bind:monsters='dungeon.monsters'
-                v-bind:gameController='gameController'
-            >
-            </battle-select>
+            <div class='dungeon-window'>
+                <health-bar v-bind:player='dungeon.player'></health-bar>
+                <battle-select 
+                    v-bind:monsters='dungeon.monsters'
+                    v-bind:gameController='gameController'
+                >
+                </battle-select>
+            </div>
         </div>
         <div v-else>
             <battle
@@ -215,14 +214,16 @@ Vue.component('battle', {
         'gameController',
     ],
     template: `
-    <div>
+    <div class='battle-window'>
         <game-over v-bind:gameController='gameController'></game-over>
         <become-player v-bind:gameController='gameController'></become-player>
-        <health-bar v-bind:player='battle.player'></health-bar>
-        <player-moves
-            v-bind:player='battle.player'
-            v-bind:gameController='gameController'
-        ></player-moves>
+        <div>
+            <health-bar v-bind:player='battle.player'></health-bar>
+            <player-moves
+                v-bind:player='battle.player'
+                v-bind:gameController='gameController'
+            ></player-moves>
+        </div>
         <div>
             <opponent v-bind:opponent='battle.monster'></opponent>
         </div>

@@ -2,7 +2,11 @@ img {
     height: 300px;
 }
 
-.game-window {
+.dungeon-window {
+    display: flex;
+}
+
+.battle-window {
     display: flex;
 }
 
