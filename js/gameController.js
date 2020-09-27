@@ -23,10 +23,6 @@ class GameController {
         this.game.dungeon.movePlayerToCell(cell);
     }
 
-    rest() {
-        this.game.player.rest();
-    }
-
     canMovePlayerToCell(cell) {
         return this.game.dungeon.canMovePlayerToCell(cell);
     }

@@ -71,7 +71,7 @@ Vue.component('opponent', {
     props: ['opponent'],
     template: `
     <div class='unit-window'> 
-        <h2>The guy she tells you not to worry about</h2>
+        <h2>{{ opponent.name }}</h2>
         <img v-bind:src='opponent.imageUrl'>
         <div>HP: {{ opponent.hp }}</div>
         <div>Current block: {{ opponent.block }}</span></div>
@@ -216,7 +216,6 @@ Vue.component('dungeon', {
                             v-on:click='gameController.movePlayerToCell(dungeon.selectedCell)'>
                             Move to selected cell
                         </button>
-                        <button v-on:click='gameController.rest()'>Rest: Heal 5% of your HP</button>
                     </div>
                     <cell-info
                         v-bind:cell='dungeon.selectedCell'

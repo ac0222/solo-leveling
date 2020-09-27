@@ -47,10 +47,6 @@ class Player extends Hunter {
         }
     }
 
-    rest() {
-        this.hp = Math.min(50, this.hp + Math.floor(this.hp * 0.05));
-    }
-
     becomePlayer() {
         this.hp = 50; 
         this.canLevelUp = true;
